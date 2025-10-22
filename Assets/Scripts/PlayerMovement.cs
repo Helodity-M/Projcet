@@ -12,18 +12,29 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         moveAction = InputSystem.actions.FindAction("Move");
+        moveAction.performed += MoveAction_performed;
         rb2d = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnDestroy()
+    {
+        moveAction.performed -= MoveAction_performed;
+    }
+
+    private void MoveAction_performed(InputAction.CallbackContext obj)
+    {
+        moveInput = obj.ReadValue<Vector2>();
+    }
+    void OnMove(InputValue inputValue)
+    {
+        Debug.Log("wow guys this is really good code");
+        moveInput = inputValue.Get<Vector2>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         rb2d.linearVelocity += moveInput * moveSpeed * Time.deltaTime;
-    }
-
-    void OnMove(InputValue inputValue) {
-        Debug.Log("wow guys this is really good code");
-        moveInput = inputValue.Get<Vector2>();
     }
 
 }
